@@ -1,0 +1,57 @@
+version: "3.9"
+
+volumes:
+  php-fpm-socket:
+  db-store:
+  psysh-store:
+
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    volumes:
+      - php-fpm-socket:/var/run/php-fpm
+      - ./server:/work/src
+      - psysh-store:/root/.config/psysh
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/php/xdebug.ini:/etc/confd/templates/xdebug.ini.tmpl
+
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - php-fpm-socket:/var/run/php-fpm
+      - ./server:/work/src
+
+  db:
+    container_name: db
+    image: postgres:15.3
+    ports:
+      - 5432:5432
+    volumes:
+      - db-store:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=laravel_local
+      - POSTGRES_USER=phper
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_ROOT_PASSWORD=secret
+      - TZ=Asia/Tokyo
+
+  db_test:
+    container_name: db_test
+    image: postgres:15.3
+    ports:
+      - 15432:5432
+    environment:
+      - POSTGRES_DB=laravel_test
+      - POSTGRES_USER=phper
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_ROOT_PASSWORD=secret
+      - TZ=Asia/Tokyo
+
