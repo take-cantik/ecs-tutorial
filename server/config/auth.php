@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        // 'guard' => 'web',
+        'guard' => 'default',
         // 'passwords' => 'users',
     ],
 
@@ -36,6 +36,11 @@ return [
     */
 
     'guards' => [
+        'default' => [
+            'driver' => 'session',
+            'provider' => 'users'
+        ]
+
         // 'web' => [
         //     'driver' => 'session',
         //     'provider' => 'users',
@@ -65,10 +70,10 @@ return [
         //     'model' => App\Models\User::class,
         // ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'users' => [
+            'driver' => 'database',
+            'table' => 'users',
+        ],
     ],
 
     /*
