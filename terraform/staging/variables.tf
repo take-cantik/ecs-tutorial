@@ -1,5 +1,8 @@
+# ------------------
+# Variables
+# ------------------
 variable "aws_region" {
   type = string
-  default = "north-east-1"
+  default = "ap-northeast-1"
   description = "AWS region to deploy to"
 }
