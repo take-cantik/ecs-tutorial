@@ -18,3 +18,15 @@ variable "environment" {
   default = "staging"
   description = "Environment"
 }
+
+variable "az_a" {
+  type = string
+  default = "ap-northeast-1a"
+  description = "Availability Zone A"
+}
+
+variable "az_c" {
+  type = string
+  default = "ap-northeast-1c"
+  description = "Availability Zone C"
+}
