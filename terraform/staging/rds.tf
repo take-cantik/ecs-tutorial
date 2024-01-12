@@ -17,3 +17,7 @@ resource "aws_db_instance" "default" {
     Name = "${var.project_name}-${var.environment}-db"
   }
 }
+
+output "rds_endpoint" {
+  value = aws_db_instance.default.endpoint
+}
