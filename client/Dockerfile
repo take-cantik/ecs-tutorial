@@ -1,21 +1,28 @@
+FROM node:20-alpine3.18 AS base
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
 # ビルド用のイメージ
-FROM node:20-alpine3.18 AS dependencies
+FROM base AS dependencies
 
 RUN apk add --no-cache libc6-compat
 WORKDIR /work/src
 
-COPY package.json pnpm-lock.json ./
-RUN pnpm install --frozen-lockfile
+COPY package.json pnpm-lock.yaml ./
+COPY . .
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm run build
 
 # 本番用のイメージ
-FROM node:20-alpine3.18 AS production
+FROM base AS production
 
 WORKDIR /work/src
 
-COPY --from=dependencies /work/src/node_modules ./node_modules
-COPY . .
+COPY --from=dependencies /work/src/.next ./
 
-RUN pnpm run build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --production
 
 EXPOSE 3000
 
