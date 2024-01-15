@@ -10,7 +10,6 @@ FROM base AS dependencies
 RUN apk add --no-cache libc6-compat
 WORKDIR /work/src
 
-COPY package.json pnpm-lock.yaml ./
 COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm run build
