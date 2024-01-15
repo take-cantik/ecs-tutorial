@@ -16,26 +16,10 @@ resource "aws_lb" "main" {
 }
 
 # Listner
-resource "aws_lb_listener" "main_http_to_https" {
+resource "aws_lb_listener" "main_http" {
   load_balancer_arn = aws_lb.main.arn
   port              = 80
   protocol          = "HTTP"
-
-  default_action {
-    type             = "redirect"
-    redirect {
-      port         = "443"
-      protocol     = "HTTPS"
-      status_code  = "HTTP_301"
-    }
-  }
-}
-
-resource "aws_lb_listener" "main_https" {
-  load_balancer_arn = aws_lb.main.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
 
   default_action {
     type             = "fixed-response"
@@ -47,6 +31,39 @@ resource "aws_lb_listener" "main_https" {
     }
   }
 }
+
+# TODO: ACMを発行したら追加
+# resource "aws_lb_listener" "main_http_to_https" {
+#   load_balancer_arn = aws_lb.main.arn
+#   port              = 80
+#   protocol          = "HTTP"
+#
+#   default_action {
+#     type             = "redirect"
+#     redirect {
+#       port         = "443"
+#       protocol     = "HTTPS"
+#       status_code  = "HTTP_301"
+#     }
+#   }
+# }
+#
+# resource "aws_lb_listener" "main_https" {
+#   load_balancer_arn = aws_lb.main.arn
+#   port              = 443
+#   protocol          = "HTTPS"
+#   ssl_policy        = "ELBSecurityPolicy-2016-08"
+#
+#   default_action {
+#     type             = "fixed-response"
+#
+#     fixed_response {
+#       content_type = "text/plain"
+#       status_code  = 200
+#       message_body = "ok"
+#     }
+#   }
+# }
 
 # Target Group
 resource "aws_lb_target_group" "web" {
@@ -91,7 +108,7 @@ resource "aws_lb_target_group" "frontend" {
 
 # Listener rule
 resource "aws_lb_listener_rule" "web" {
-  listener_arn = aws_lb_listener.main_https.arn
+  listener_arn = aws_lb_listener.main_http.arn
   priority     = 1
 
   condition {
@@ -107,7 +124,7 @@ resource "aws_lb_listener_rule" "web" {
 }
 
 resource "aws_lb_listener_rule" "frontend" {
-  listener_arn = aws_lb_listener.main_https.arn
+  listener_arn = aws_lb_listener.main_http.arn
   priority     = 3
 
   condition {
