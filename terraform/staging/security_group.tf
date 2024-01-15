@@ -99,3 +99,37 @@ resource "aws_security_group" "rds" {
   }
 }
 
+# -----------------------
+# Security Group for EC2
+# -----------------------
+resource "aws_security_group" "pgadmin" {
+  name = "${var.project_name}-${var.environment}-pgadmin"
+  vpc_id = module.vpc.vpc_id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    cidr_blocks = [
+      "59.170.71.27/32"
+    ]
+    description = "miki home ip address http"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+  }
+
+  ingress {
+    cidr_blocks = [
+      "1.21.53.106/32"
+    ]
+    description = "hackz office ip address http"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+  }
+}
