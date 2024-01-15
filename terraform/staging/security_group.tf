@@ -117,6 +117,26 @@ resource "aws_security_group" "pgadmin" {
     cidr_blocks = [
       "59.170.71.27/32"
     ]
+    description = "miki home ip address ssh"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+  }
+
+  ingress {
+    cidr_blocks = [
+      "1.21.53.106/32"
+    ]
+    description = "hackz office ip address ssh"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+  }
+
+  ingress {
+    cidr_blocks = [
+      "59.170.71.27/32"
+    ]
     description = "miki home ip address http"
     from_port   = 80
     to_port     = 80
