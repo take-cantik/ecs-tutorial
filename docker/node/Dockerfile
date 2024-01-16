@@ -19,10 +19,15 @@ FROM base AS production
 
 WORKDIR /work/src
 
-COPY --from=dependencies /work/src/.next ./
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --production
+COPY --from=dependencies /work/src/.next/standalone ./
+COPY --from=dependencies /work/src/.next/static ./.next/static
+COPY --from=dependencies /work/src/public ./public
+
+USER nextjs
 
 EXPOSE 3000
 
-CMD ["pnpm", "run", "start"]
+CMD ["node", "server.js"]
