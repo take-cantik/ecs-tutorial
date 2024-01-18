@@ -3,4 +3,4 @@ cluster: ecs-tutorial-staging-cluster
 service: ecs-tutorial-staging-service
 service_definition: ecs-service-def.json
 task_definition: ecs-task-def.json
-timeout: 10m0s
+timeout: "10m0s"
