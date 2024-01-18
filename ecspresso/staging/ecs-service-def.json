@@ -41,5 +41,19 @@
   "platformFamily": "Linux",
   "platformVersion": "LATEST",
   "propagateTags": "NONE",
-  "schedulingStrategy": "REPLICA"
+  "schedulingStrategy": "REPLICA",
+  "tags": [
+    {
+      "key": "Name",
+      "value": "ecs-tutorial-staging-service"
+    },
+    {
+      "key": "Environment",
+      "value": "staging"
+    },
+    {
+      "key": "Project",
+      "value": "ecs-tutorial"
+    }
+  ]
 }
