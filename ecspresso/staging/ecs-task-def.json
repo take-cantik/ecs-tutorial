@@ -62,6 +62,12 @@
           "name": "web-80-tcp",
           "protocol": "tcp"
         }
+      ],
+      "volumesFrom": [
+        {
+          "readOnly": true,
+          "sourceContainer": "server"
+        }
       ]
     }
   ],
