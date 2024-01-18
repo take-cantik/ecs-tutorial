@@ -1,6 +1,7 @@
 {
   "containerDefinitions": [
     {
+      "name": "client",
       "cpu": 256,
       "essential": true,
       "image": "{{ must_env `AWS_ACCOUNT_ID` }}.dkr.ecr.ap-northeast-1.amazonaws.com/ecs-tutorial-staging-frontend:latest",
@@ -10,10 +11,9 @@
           "awslogs-create-group": "true",
           "awslogs-group": "/ecs/ecs-tutorial-staging-ecs-task",
           "awslogs-region": "ap-northeast-1",
-          "awslogs-stream-prefix": "ecs"
+          "awslogs-stream-prefix": "ecs-client"
         }
       },
-      "name": "client",
       "portMappings": [
         {
           "appProtocol": "http",
@@ -25,17 +25,35 @@
       ]
     },
     {
+      "name": "server",
       "cpu": 128,
       "essential": true,
       "image": "{{ must_env `AWS_ACCOUNT_ID` }}.dkr.ecr.ap-northeast-1.amazonaws.com/ecs-tutorial-staging-backend:latest",
-      "name": "server",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "/ecs/ecs-tutorial-staging-ecs-task",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs-server"
+        }
+      },
       "portMappings": []
     },
     {
+      "name": "web",
       "cpu": 128,
       "essential": true,
       "image": "{{ must_env `AWS_ACCOUNT_ID` }}.dkr.ecr.ap-northeast-1.amazonaws.com/ecs-tutorial-staging-web:latest",
-      "name": "web",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "/ecs/ecs-tutorial-staging-ecs-task",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs-web"
+        }
+      },
       "portMappings": [
         {
           "appProtocol": "http",
